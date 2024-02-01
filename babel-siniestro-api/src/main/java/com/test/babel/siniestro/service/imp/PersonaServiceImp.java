@@ -1,7 +1,6 @@
 package com.test.babel.siniestro.service.imp;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.test.babel.siniestro.dao.PersonaDao;
 import com.test.babel.siniestro.entity.Persona;
+import com.test.babel.siniestro.exceptions.ResourceNotFoundException;
 import com.test.babel.siniestro.service.PersonaService;
 
 @Service
@@ -27,23 +27,29 @@ public class PersonaServiceImp implements PersonaService {
 	}
 
 	@Override
-	public List<Persona> findByRfc(String rfc) {
+	public List<Persona> findByRfc(String rfc){
 		logger.info("findByRfc");
-		return personaDao.findByRfc(rfc);
+		List<Persona> personas =personaDao.findByRfc(rfc);
+		if(personas.isEmpty())throw new ResourceNotFoundException();
+		return personas;
 	}
 
 	@Override
-	public Optional<Persona> findPersonaById(Long idPersona) {
+	public Persona findPersonaById(Long idPersona) {
 		logger.info("findPersonaById");
-		return personaDao.findById(idPersona);
+		return personaDao.findById(idPersona)
+				.orElseThrow(() -> new ResourceNotFoundException());
 	}
 
 	@Override
-	public void deletePersona(Long idPersona) {
+	public boolean deletePersona(Long idPersona) {
 		logger.info("deletePersona");
 		var per = personaDao.findById(idPersona);
-		if (!per.isEmpty())
+		if (!per.isEmpty()) {
 			personaDao.delete(per.get());
+			return true;
+		}
+		return false;
 	}
 
 	@Override

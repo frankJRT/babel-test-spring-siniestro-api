@@ -1,7 +1,6 @@
 package com.test.babel.siniestro.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.test.babel.siniestro.entity.Persona;
 
@@ -11,9 +10,9 @@ public interface PersonaService {
 
 	List<Persona> findByRfc(String rfc);
 	
-	Optional<Persona> findPersonaById(Long idPersona);
+	Persona findPersonaById(Long idPersona);
 
-	void deletePersona(Long idPersona);
+	boolean deletePersona(Long idPersona);
 
 	Persona savePersona(Persona persona);
 }

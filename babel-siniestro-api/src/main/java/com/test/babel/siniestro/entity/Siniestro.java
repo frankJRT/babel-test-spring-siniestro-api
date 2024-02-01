@@ -2,20 +2,20 @@ package com.test.babel.siniestro.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "Siniestro")
@@ -26,7 +26,8 @@ public class Siniestro {
 	private Long idSiniestro;
 
 	@JoinColumn(name = "idPoliza")
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Poliza idPoliza;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -45,6 +46,10 @@ public class Siniestro {
 	private Boolean asistenciaMedica;
 
 	private Boolean asistenciaVial;
+
+	public Siniestro() {
+		fechaHoraSiniestro = new Date();
+	}
 
 	public Long getIdSiniestro() {
 		return idSiniestro;

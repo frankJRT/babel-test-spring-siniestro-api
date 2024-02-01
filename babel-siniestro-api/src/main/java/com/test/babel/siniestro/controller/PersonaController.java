@@ -1,11 +1,11 @@
 package com.test.babel.siniestro.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,23 +33,24 @@ public class PersonaController {
 
 	@GetMapping("/Rfc/{rfc}")
 	public ResponseEntity<List<Persona>> getPersonas(@PathVariable String rfc) {
-		return ResponseEntity.ok(personaService.findByRfc(rfc));
+		return ResponseEntity.ok(personaService.findByRfc(rfc.toUpperCase()));
 	}
 
-	@GetMapping("/persona/{idPersona}")
-	public ResponseEntity<Optional<Persona>> getPersonas(@PathVariable Long idPersona) {
+	@GetMapping("/id/{idPersona}")
+	public ResponseEntity<Persona> getPersonas(@PathVariable Long idPersona) {
 		return ResponseEntity.ok(personaService.findPersonaById(idPersona));
 	}
-	
+
 	@PostMapping("/save")
 	public ResponseEntity<Persona> savePersona(@RequestBody Persona persona) {
-		return ResponseEntity.ok(personaService.savePersona(persona));
+		Persona per = personaService.savePersona(persona);
+		return ResponseEntity.status(HttpStatus.CREATED).body(per);
 	}
-	
-//	@DeleteMapping
-//	public ResponseEntity<?> deletePersona(@PathVariable Long idPersona){
-//		
-//	}
-	
-	
+
+	@DeleteMapping("/persona/{idPersona}")
+	public ResponseEntity<Boolean> deletePersona(@PathVariable Long idPersona) {
+		boolean deleted = personaService.deletePersona(idPersona);
+		return ResponseEntity.ok(deleted);
+	}
+
 }
