@@ -1,5 +1,6 @@
 package com.test.babel.siniestro.service.imp;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +60,7 @@ public class SiniestroServiceImp implements SiniestroService {
 		if (pol.isEmpty())
 			throw new ResourceNotFoundException();
 		siniestro.setIdPoliza(pol.get());
+		siniestro.setFechaHoraSiniestro(new Date());
 		return siniestroDao.save(siniestro);
 	}
 
